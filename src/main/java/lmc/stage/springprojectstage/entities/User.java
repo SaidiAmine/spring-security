@@ -1,6 +1,7 @@
 package lmc.stage.springprojectstage.entities;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 public class User {
@@ -9,16 +10,34 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column
     private int id ;
-    private String email ;
-    private String name ;
-    private String username ;
-    private int mobile1 ;
-    private int mobile2 ;
-    @ManyToOne(fetch = FetchType.LAZY)
+
+    @Enumerated(EnumType.STRING)
+    @Column
+    private UserState state ;
+
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
     private Role role ;
+
+
+    @Column
+    private String email ;
+    @Column
+    private String name ;
+    @Column
+    private String username ;
+    @Column
+    private int mobile1 ;
+    @Column
+    private int mobile2 ;
+    @Column
     private String password ;
+    @Column
     private String urlWeb ;
+    @Column
+    private Date dateCreation ;
+    @Column
+    private Date stateChanged ;
 
     public User() {
     }
@@ -71,15 +90,12 @@ public class User {
         this.mobile2 = mobile2;
     }
 
-    public User(String email, String name, String username, int mobile1, int mobile2, Role role, String password, String urlWeb) {
-        this.email = email;
-        this.name = name;
-        this.username = username;
-        this.mobile1 = mobile1;
-        this.mobile2 = mobile2;
-        this.role = role;
-        this.password = password;
-        this.urlWeb = urlWeb;
+    public UserState getState() {
+        return state;
+    }
+
+    public void setState(UserState state) {
+        this.state = state;
     }
 
     public Role getRole() {
@@ -104,5 +120,35 @@ public class User {
 
     public void setUrlWeb(String urlWeb) {
         this.urlWeb = urlWeb;
+    }
+
+    public Date getDateCreation() {
+        return dateCreation;
+    }
+
+    public void setDateCreation(Date dateCreation) {
+        this.dateCreation = dateCreation;
+    }
+
+    public Date getStateChanged() {
+        return stateChanged;
+    }
+
+    public void setStateChanged(Date stateChanged) {
+        this.stateChanged = stateChanged;
+    }
+
+    public User(UserState state, Role role, String email, String name, String username, int mobile1, int mobile2, String password, String urlWeb, Date dateCreation, Date stateChanged) {
+        this.state = state;
+        this.role = role;
+        this.email = email;
+        this.name = name;
+        this.username = username;
+        this.mobile1 = mobile1;
+        this.mobile2 = mobile2;
+        this.password = password;
+        this.urlWeb = urlWeb;
+        this.dateCreation = dateCreation;
+        this.stateChanged = stateChanged;
     }
 }
