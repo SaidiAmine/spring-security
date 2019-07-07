@@ -1,10 +1,14 @@
 package lmc.stage.springprojectstage.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Project {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column
@@ -13,26 +17,13 @@ public class Project {
     @Column
     private String domain ;
 
-    @OneToMany()
-    @JoinColumn(name="id")
-    private List<User> userList ;
+
 
 
     public Project() {
     }
 
-    public Project(String domain, List<User> userList) {
-        this.domain = domain;
-        this.userList = userList;
-    }
 
-    public List<User> getUserList() {
-        return userList;
-    }
-
-    public void setUserList(List<User> userList) {
-        this.userList = userList;
-    }
 
     public int getId() {
         return id;
@@ -49,4 +40,6 @@ public class Project {
     public void setDomain(String domain) {
         this.domain = domain;
     }
+
+
 }
