@@ -1,9 +1,12 @@
 package lmc.stage.springprojectstage.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Tasks {
 
     @Id
@@ -25,14 +28,14 @@ public class Tasks {
     @Column
     private String state ;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "project_id")
     private Project project ;
 
     @Column
     private String type ;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "origin_id")
     private User user  ;
 

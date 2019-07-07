@@ -24,12 +24,23 @@ public class RoleServiceImp implements  RoleService{
     }
 
     @Override
-    public void deleteRole(int roleId) {
+    public void deleteRole(Integer roleId) {
         Role role = roleRepository.getOne(roleId);
         if (role != null)
         {
             roleRepository.delete(role);
         }
+    }
 
+    @Override
+    public Role findById(Integer id) {
+        Role role = roleRepository.getOne(id) ;
+        if (role != null)
+        {
+            return role ;
+        }
+        else {
+            return null ;
+        }
     }
 }
