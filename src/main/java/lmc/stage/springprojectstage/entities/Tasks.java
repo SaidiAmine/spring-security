@@ -12,9 +12,6 @@ public class Tasks {
     @Id
     @GeneratedValue (strategy = GenerationType.AUTO)
     private int id ;
-
-    @Column
-    private String taskaffect ;
     @Column
     private Date dateOrigin ;
     @Column
@@ -27,6 +24,8 @@ public class Tasks {
     private String description ;
     @Column
     private String state ;
+    @Column
+    private Integer taskAsked ;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "project_id")
@@ -36,7 +35,7 @@ public class Tasks {
     private String type ;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "origin_id")
+    @JoinColumn(name = "taskaffect")
     private User user  ;
 
     public int getId() {
@@ -48,13 +47,12 @@ public class Tasks {
     }
 
 
-
-    public String getTaskaffect() {
-        return taskaffect;
+    public Integer getTaskAsked() {
+        return taskAsked;
     }
 
-    public void setTaskaffect(String taskaffect) {
-        this.taskaffect = taskaffect;
+    public void setTaskAsked(Integer taskAsked) {
+        this.taskAsked = taskAsked;
     }
 
     public Date getDateOrigin() {
@@ -132,16 +130,5 @@ public class Tasks {
     public Tasks() {
     }
 
-    public Tasks( String taskaffect, Date dateOrigin, Date dateAffect, Date dateLivraison, Date implementationHours, String description, String state, Project project, String type, User user) {
-        this.taskaffect = taskaffect;
-        this.dateOrigin = dateOrigin;
-        this.dateAffect = dateAffect;
-        this.dateLivraison = dateLivraison;
-        this.implementationHours = implementationHours;
-        this.description = description;
-        this.state = state;
-        this.project = project;
-        this.type = type;
-        this.user = user;
-    }
+
 }
