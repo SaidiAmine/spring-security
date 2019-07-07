@@ -22,9 +22,7 @@ public class User {
     @JoinColumn(name = "role_id")
     private Role role ;
 
-    @ManyToOne(fetch = FetchType.EAGER,optional = true)
-    @JoinColumn(name = "project_id")
-    private Project project ;
+
 
     @Column
     private String email ;
@@ -144,13 +142,7 @@ public class User {
         this.stateChanged = stateChanged;
     }
 
-    public Project getProject() {
-        return project;
-    }
 
-    public void setProject(Project project) {
-        this.project = project;
-    }
 
 
 }
