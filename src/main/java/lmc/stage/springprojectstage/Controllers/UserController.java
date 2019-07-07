@@ -30,14 +30,13 @@ public class UserController {
 
     @RequestMapping(value="/{id}",method=RequestMethod.GET)
     public User findbyId(@PathVariable Integer id) {
-        System.out.println("find by id d5al lel fonction c bon ");
         return userService.findById(id);
     }
 
     @RequestMapping(method=RequestMethod.POST)
     public void addUser(@RequestBody User user) {
         user.setRole(roleService.findById(user.getRole().getId()));
-        user.setProject(projectService.findById(user.getProject().getId()));
+      //  user.setProject(projectService.findById(user.getProject().getId()));
         userService.addUser(user);
     }
 
