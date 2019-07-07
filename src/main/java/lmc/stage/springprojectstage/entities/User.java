@@ -1,9 +1,12 @@
 package lmc.stage.springprojectstage.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
 import java.util.Date;
 
-@Entity
+@Entity(name = "User")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
 
     @Id
@@ -15,10 +18,13 @@ public class User {
     @Column
     private UserState state ;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Role role ;
 
+    @ManyToOne(fetch = FetchType.EAGER,optional = true)
+    @JoinColumn(name = "project_id")
+    private Project project ;
 
     @Column
     private String email ;
@@ -138,17 +144,13 @@ public class User {
         this.stateChanged = stateChanged;
     }
 
-    public User(UserState state, Role role, String email, String name, String username, int mobile1, int mobile2, String password, String urlWeb, Date dateCreation, Date stateChanged) {
-        this.state = state;
-        this.role = role;
-        this.email = email;
-        this.name = name;
-        this.username = username;
-        this.mobile1 = mobile1;
-        this.mobile2 = mobile2;
-        this.password = password;
-        this.urlWeb = urlWeb;
-        this.dateCreation = dateCreation;
-        this.stateChanged = stateChanged;
+    public Project getProject() {
+        return project;
     }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
+
 }
