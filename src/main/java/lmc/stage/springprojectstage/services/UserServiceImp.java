@@ -35,4 +35,6 @@ public class UserServiceImp implements UserService{
     public User findById(Integer id) {
         return userRepository.getOne(id);
     }
+
+
 }

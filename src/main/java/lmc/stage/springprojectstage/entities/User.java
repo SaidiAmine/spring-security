@@ -3,14 +3,17 @@ package lmc.stage.springprojectstage.entities;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
+import java.util.List;
 
-@Entity(name = "User")
+@Entity(name = "USER")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private int id ;
 
@@ -18,30 +21,70 @@ public class User {
     @Column
     private UserState state ;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id")
     private Role role ;
 
+    @Column(name = "EMAIL", length = 50)
+    @NotNull
+    @Size(min = 4, max = 50)
+    private String email;
 
+    @Column(name = "FIRSTNAME", length = 50)
+    @NotNull
+    @Size(min = 4, max = 50)
+    private String firstname;
 
-    @Column
-    private String email ;
-    @Column
-    private String name ;
-    @Column
-    private String username ;
+    @Column(name = "LASTNAME", length = 50)
+    @NotNull
+    @Size(min = 4, max = 50)
+    private String lastname;
+
+    @Column(name = "USERNAME", length = 50, unique = true)
+    @NotNull
+    @Size(min = 4, max = 50)
+    private String username;
+
+    @Column(name = "ENABLED")
+    @NotNull
+    private Boolean enabled;
+
+    @Column(name = "LASTPASSWORDRESETDATE")
+    @Temporal(TemporalType.TIMESTAMP)
+    @NotNull
+    private Date lastPasswordResetDate;
+
     @Column
     private int mobile1 ;
     @Column
     private int mobile2 ;
-    @Column
-    private String password ;
+
+    @Column(name = "PASSWORD", length = 100)
+    @NotNull
+    @Size(min = 4, max = 100)
+    private String password;
+
     @Column
     private String urlWeb ;
     @Column
     private Date dateCreation ;
     @Column
     private Date stateChanged ;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "USER_AUTHORITY",
+            joinColumns = {@JoinColumn(name = "USER_ID", referencedColumnName = "ID")},
+            inverseJoinColumns = {@JoinColumn(name = "AUTHORITY_ID", referencedColumnName = "ID")})
+    private List<Authority> authorities;
+
+    public List<Authority> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(List<Authority> authorities) {
+        this.authorities = authorities;
+    }
 
     public User() {
     }
@@ -60,14 +103,6 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getUsername() {
@@ -142,7 +177,35 @@ public class User {
         this.stateChanged = stateChanged;
     }
 
+    public String getFirstname() {
+        return firstname;
+    }
 
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
 
+    public String getLastname() {
+        return lastname;
+    }
 
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public Date getLastPasswordResetDate() {
+        return lastPasswordResetDate;
+    }
+
+    public void setLastPasswordResetDate(Date lastPasswordResetDate) {
+        this.lastPasswordResetDate = lastPasswordResetDate;
+    }
 }
