@@ -2,8 +2,10 @@ package lmc.stage.springprojectstage.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import javax.annotation.Nullable;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 import javax.validation.constraints.Size;
 import java.util.Date;
 import java.util.List;
@@ -51,12 +53,14 @@ public class User {
 
     @Column(name = "LASTPASSWORDRESETDATE")
     @Temporal(TemporalType.TIMESTAMP)
-    @NotNull
+    //@NotNull
     private Date lastPasswordResetDate;
 
     @Column
+    @Nullable
     private int mobile1 ;
     @Column
+    @Nullable
     private int mobile2 ;
 
     @Column(name = "PASSWORD", length = 100)
