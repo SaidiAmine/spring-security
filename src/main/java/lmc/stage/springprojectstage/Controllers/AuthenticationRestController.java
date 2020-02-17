@@ -113,14 +113,6 @@ public class AuthenticationRestController {
 
     ////
 
-    @RequestMapping(value = "/registration", method = RequestMethod.POST)
-    public ResponseEntity<?> registerUser(@RequestBody User user) {
-
-        userService.addUser(user);
-        return ok().body("User successfuly used.");
-
-    }
-
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public ResponseEntity<String> logoutUser(HttpServletRequest request){
         logger.info("/logout controller.");
@@ -131,15 +123,10 @@ public class AuthenticationRestController {
             Date date = jwtTokenUtil.getExpirationDateFromToken(authToken);
             redisUtil.sadd(authToken, "blacklisted", date.getTime() / 1000);
             logger.info("Redis expiration time of blacklisted token: "+date.getTime()/1000);
-            return ResponseEntity.status(HttpStatus.ACCEPTED).body("Successfully logged out");
+            return new ResponseEntity<>("{}", HttpStatus.OK);
         }
     }
 
-    ////
-    @ExceptionHandler({AuthenticationException.class})
-    public ResponseEntity<String> handleAuthenticationException(AuthenticationException e) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
-    }
 
     /**
      * Authenticates the user. If something is wrong, an {@link AuthenticationException} will be thrown

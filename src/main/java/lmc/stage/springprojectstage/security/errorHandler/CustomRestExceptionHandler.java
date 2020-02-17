@@ -1,5 +1,8 @@
 package lmc.stage.springprojectstage.security.errorHandler;
 
+import lmc.stage.springprojectstage.utils.AuthenticationException;
+import lmc.stage.springprojectstage.utils.EmailExistsException;
+import lmc.stage.springprojectstage.utils.UsernameExistsException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,17 +41,37 @@ public class CustomRestExceptionHandler extends ResponseEntityExceptionHandler {
                 ex, apiError, headers, apiError.getStatus(), request);
     }
 
-    //@ResponseStatus(value = HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(HttpClientErrorException.Unauthorized.class)
     public ResponseEntity<Object> unAuthorizedUserException(HttpServletRequest request, Exception ex) {
-       ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED, "Custom error: You're not authorized to reach this page.", "You're not authorized to reach this page." );
+       ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED, "You are not authenticated, you can not reach this resource.", "You're not authorized to reach this page.", "You're not authorized to reach this page." );
         return new ResponseEntity<>(apiError, HttpStatus.UNAUTHORIZED);
     }
 
-    //@ResponseStatus(value = HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(HttpClientErrorException.Forbidden.class)
     public ResponseEntity<Object> forbiddenUserException(HttpServletRequest request, Exception ex) {
-        ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED, "Custom error: You're not authorized to reach this page.", "You're not authorized to reach this page." );
+        ApiError apiError = new ApiError(HttpStatus.UNAUTHORIZED, "You don't have enough power to reach this page.", "You're not authorized to reach this page.", "You're not authorized to reach this page." );
         return new ResponseEntity<>(apiError, HttpStatus.UNAUTHORIZED);
+    }
+
+    // Send error code 400 Bad Request - for Disabled account / bad credentials
+    @ExceptionHandler({AuthenticationException.class})
+    public ResponseEntity<Object> handleAuthenticationException(AuthenticationException e) {
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, e.getLocalizedMessage(), e.getMessage(), "Bad credentials or account disabled.");
+        return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
+    }
+
+
+    // Handles the UsernameExistsExceton when registering, return a 400 Bad request status
+    // with appropriate message.
+    @ExceptionHandler(UsernameExistsException.class)
+    public ResponseEntity<Object> handleUsernameExists(UsernameExistsException e) {
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, e.getLocalizedMessage(), e.getMessage(), "Username already exists.");
+        return new ResponseEntity<>(apiError, new HttpHeaders(), apiError.getStatus());
+    }
+
+    @ExceptionHandler(EmailExistsException.class)
+    public ResponseEntity<Object> handleEmailExists(EmailExistsException e) {
+        ApiError apiError = new ApiError(HttpStatus.BAD_REQUEST, e.getLocalizedMessage(), e.getMessage(), "Email already exists.");
+        return new ResponseEntity<Object>(apiError, new HttpHeaders(), apiError.getStatus());
     }
 }
