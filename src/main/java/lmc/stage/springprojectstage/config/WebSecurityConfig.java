@@ -20,13 +20,11 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.authentication.logout.LogoutFilter;
-import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.http.HttpServletResponse;
 
 @Configuration
-@EnableWebSecurity(debug = true) // debug = true, if you want to see the registered filters in their order ( after sending a request to the server )
+@EnableWebSecurity // debug = true, if you want to see the registered filters in their order ( after sending a request to the server )
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableRedisRepositories
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -46,6 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
     private JwtUserDetailsService jwtUserDetailsService;
+
     @Value("${jwt.header}")
     private String tokenHeader;
 
@@ -72,8 +71,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        // httpSecurity.addFilterBefore(new BlackListFilter(), OncePerRequestFilter.class);
-        //ttpSecurity.addFilterAfter(new BlackListFilter(), LogoutFilter.class);
         httpSecurity.cors();
         httpSecurity.exceptionHandling().accessDeniedHandler(customAccessDeniedHandler);
         httpSecurity
@@ -99,6 +96,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/currentLoggedUser").authenticated()
                 .antMatchers("/admin").hasRole("ADMIN")
                 .antMatchers("/users").hasAnyRole("ADMIN", "USER")
+                .antMatchers("/user/registration").permitAll()
                 .anyRequest().authenticated()
                 .and().logout()
                 .logoutUrl("/api/user/logout")
